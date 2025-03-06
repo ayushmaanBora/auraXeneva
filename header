@@ -1,0 +1,10 @@
+#ifndef _STDIO_H
+#define _STDIO_H
+
+#include <stdarg.h>
+
+int fprintf(FILE *stream, const char *format, ...);
+char *fgets(char *str, int num, FILE *stream);
+int feof(FILE *stream);
+
+#endif

@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Helper function for formatted output
+int vfprintf(FILE *stream, const char *format, va_list args) {
+    char buffer[512];
+    int length = vsnprintf(buffer, sizeof(buffer), format, args);
+    if (length > 0) {
+        fwrite(buffer, 1, length, stream);
+    }
+    return length;
+}
+
+// fprintf: Write formatted text to a file
+int fprintf(FILE *stream, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    int result = vfprintf(stream, format, args);
+    va_end(args);
+    return result;
+}
+
+// fgets: Read one line from a file
+char *fgets(char *str, int num, FILE *stream) {
+    if (!stream || num <= 0) return NULL;
+
+    int i;
+    for (i = 0; i < num - 1; i++) {
+        char ch;
+        if (fread(&ch, 1, 1, stream) == 0) {
+            break;  // End of file
+        }
+        str[i] = ch;
+        if (ch == '\n') break;  // Stop at newline
+    }
+    str[i] = '\0';  // Null-terminate the string
+    return (i == 0) ? NULL : str;
+}
+
+// feof: Check if file end has been reached
+int feof(FILE *stream) {
+    if (!stream) return 1;
+
+    long current_pos = ftell(stream);
+    fseek(stream, 0, SEEK_END);
+    long end_pos = ftell(stream);
+    fseek(stream, current_pos, SEEK_SET);
+
+    return (current_pos >= end_pos);
+}

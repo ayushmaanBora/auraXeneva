@@ -1,10 +1,62 @@
-#ifndef _STDIO_H
-#define _STDIO_H
+#ifndef __STDIO_H__
+#define __STDIO_H__
 
+#include <stdint.h>
+#include <_xeneva.h>
 #include <stdarg.h>
 
-int fprintf(FILE *stream, const char *format, ...);
-char *fgets(char *str, int num, FILE *stream);
-int feof(FILE *stream);
+#ifdef __cplusplus
+XE_EXTERN {
+#endif
+
+typedef struct _IO_FILE_ {
+    unsigned char* base;
+    unsigned char* pos;
+    unsigned char* ptr;
+    int _file_num;
+    int eof;
+    int size;
+    int curr_pos;
+} FILE;
+
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+
+#define stdin (FILE*)(1)
+#define stdout (FILE*)(1+1)
+#define stderr (FILE*)(2+1)
+
+XE_LIB int fprintf(FILE*, const char*, ...);
+XE_LIB int printf(const char*, ...);
+XE_LIB FILE* fopen(const char* name, const char* mode);
+XE_LIB size_t fread(void* ptr, size_t size, size_t nmemb, FILE* stream);
+XE_LIB size_t fwrite(void* ptr, size_t sz, size_t nmemb, FILE* stream);
+XE_LIB long ftell(FILE* fp);
+XE_LIB int fseek(FILE* fp, long int offset, int pos);
+XE_LIB int fgetc(FILE* fp);
+XE_LIB int fclose(FILE* fp);
+XE_LIB int fflush(FILE* stream);
+XE_LIB int fputc(int c, FILE* stream);
+XE_LIB int fputs(const char* s, FILE* stream);
+XE_LIB int puts(const char *s);
+XE_LIB int vfprintf(FILE* stream, const char* format, va_list arg);
+XE_LIB int vsnprintf(char* output, size_t sz, const char* format, va_list ap);
+XE_LIB int vsprintf(char* output, const char* format, va_list list);
+XE_LIB int vprintf(const char* format, va_list list);
+XE_LIB int sprintf(char* str, const char* string, ...);
+XE_LIB int snprintf(char* output, size_t sz, const char* format, ...);
+XE_LIB int getchar();
+XE_LIB int remove(const char* pathname);
+XE_LIB int rename(const char* oldpath, const char* newpath);
+XE_LIB int putchar(int c);
+XE_LIB int scanf(const char* format, ...);
+XE_LIB int sscanf(const char* str, const char* format, ...);
+XE_LIB char *fgets(char *str, int num, FILE *stream);
+XE_LIB int feof(FILE *stream);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
